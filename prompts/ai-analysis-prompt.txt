@@ -78,13 +78,27 @@ Sample assessments:
 •	Strong market growth and peer performance make this attractive. However, poor workforce demand and earnings are concerning.
 •	Although program size is small, strong market growth and widespread peer growth make this attractive, though modest. Partnership with course-sharing may be cost-effective.
 •	Market declines, poor peer performance, and weak job outlook make this unattractive.
+
 END WITH SCORE TABLE:
-Category | Score 
-Market Growth (Max 2) | [actual score] 
-"Schools Like Us" (Max 3) | [actual score] 
-Opportunity Size (Max 2) | [actual score] 
-Workforce Demand (Max 2) | [actual score] 
-Earnings Outcomes (Max 1) | [actual score]
-Total Score (Max 10)  | [sum]
+
+CRITICAL: You MUST include this exact table at the end of your response. Use proper markdown table syntax with pipes and dashes:
+
+| CATEGORY | SCORE |
+|----------|-------|
+| Market Growth Score | [insert actual score with 1 decimal, e.g., 0.9] |
+| Schools Like Us Score | [insert actual score with 1 decimal, e.g., 2.8] |
+| Opportunity Size Score | [insert actual score with 1 decimal, e.g., 2.0] |
+| Workforce Demand Score | [insert actual score with 1 decimal, e.g., 1.4] |
+| Earning Outcomes Score | [insert actual score with 1 decimal, e.g., 0.7] |
+| **Total Score (Max 10)** | **[insert sum with 1 decimal, e.g., 7.7]** |
+
+REQUIREMENTS:
+- Use exactly this markdown table format with | pipes and proper alignment dashes
+- Include ALL 6 rows (5 category scores + 1 total score row)
+- Round all scores to 1 decimal place
+- Bold the Total Score row using ** on both sides
+- The category names must match exactly as shown above
+- Double-check that your Total Score equals the sum of the 5 category scores
+- Do NOT skip this table or modify its structure
 
 Use ONLY provided metrics. No hallucinations. Match evaluative tone to scores.
