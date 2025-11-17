@@ -402,6 +402,19 @@
             });
         }
 
+        
+        // Initialize when DOM is ready
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM loaded, setting up Claude extension...');
+            
+            try {
+                loadPrompt();
+            } catch (error) {
+                console.error('Setup error:', error);
+                showError('Extension setup failed: ' + error.message);
+            }
+        });
+
         function loadPrompt() {
             console.log('🔍 Loading Claude prompt via authenticated proxy...');
             
