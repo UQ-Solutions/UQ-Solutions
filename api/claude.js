@@ -92,10 +92,58 @@ export default async function handler(req, res) {
       console.warn('⚠️ Response was truncated due to max_tokens limit');
     }
     
+    // ✅ NEW: Validate table presence in response
+    const content = result.content[0].text;
+    
+    // Check if the required score table is present
+    if (!content.includes('| CATEGORY | SCORE |')) {
+      console.warn('⚠️ Warning: Response missing required score table header');
+    } else {
+      console.log('✅ Score table header found');
+      
+      // Extract and validate table structure
+      const tableMatch = content.match(/\| CATEGORY \| SCORE \|([\s\S]*?)(?:\n\n|\n$|$)/);
+      if (tableMatch) {
+        const tableContent = tableMatch[1];
+        const tableRows = tableContent.trim().split('\n').filter(row => row.trim().includes('|'));
+        
+        console.log(`📊 Table validation: Found ${tableRows.length} rows`);
+        
+        // Should have: separator row + 6 data rows (5 categories + 1 total)
+        if (tableRows.length < 7) {
+          console.warn(`⚠️ Warning: Table has ${tableRows.length} rows, expected at least 7 (separator + 6 data rows)`);
+        } else {
+          console.log('✅ Table structure appears complete');
+        }
+        
+        // Check for required categories
+        const requiredCategories = [
+          'Market Growth Score',
+          'Schools Like Us Score',
+          'Opportunity Size Score',
+          'Workforce Demand Score',
+          'Earning Outcomes Score',
+          'Total Score'
+        ];
+        
+        const missingCategories = requiredCategories.filter(cat => 
+          !content.includes(cat)
+        );
+        
+        if (missingCategories.length > 0) {
+          console.warn('⚠️ Warning: Missing categories:', missingCategories.join(', '));
+        } else {
+          console.log('✅ All required categories present');
+        }
+      } else {
+        console.warn('⚠️ Warning: Could not parse table structure');
+      }
+    }
+    
     // Return the response
     res.status(200).json({
       success: true,
-      content: result.content[0].text,
+      content: content,
       usage: result.usage,
       stop_reason: result.stop_reason
     });
