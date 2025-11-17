@@ -352,54 +352,55 @@
         }
 
         function convertMetricsTable(htmlSummary) {
-            return htmlSummary.replace(
-                /Category \| Score[\s\S]*?Total Score[^|]*\|[^0-9]*([\d.]+)/,
-                function(match) {
-                    const lines = match.split(/\n|<br>/);
-                    let tableHTML = '<table><thead><tr><th>Category</th><th>Score</th></tr></thead><tbody>';
-                    
-                    lines.forEach(line => {
-                        if (line.includes('Category | Score') || line.includes('---') || !line.trim()) {
-                            return;
-                        }
-                        
-                        if (line.includes('Total Score')) {
-                            const totalMatch = line.match(/Total Score[^|]*\|[^0-9]*([\d.]+)/);
-                            if (totalMatch) {
-                                const formattedTotalScore = parseFloat(totalMatch[1]).toFixed(1);
-                                tableHTML += `<tr><td><strong>Total Score (Max 10)</strong></td><td><strong>${formattedTotalScore}</strong></td></tr>`;
-                            }
-                        } else if (line.includes('|')) {
-                            const parts = line.split('|');
-                            if (parts.length >= 2) {
-                                const category = parts[0].trim();
-                                const scoreText = parts[1].trim();
-                                const scoreMatch = scoreText.match(/([\d.]+)/);
-                                if (scoreMatch) {
-                                    const score = parseFloat(scoreMatch[1]).toFixed(1);
-                                    tableHTML += `<tr><td>${category}</td><td>${score}</td></tr>`;
-                                }
-                            }
-                        }
-                    });
-                    
-                    tableHTML += '</tbody></table>';
-                    return tableHTML;
-                }
-            );
-        }
-
-        // Initialize when DOM is ready
-        document.addEventListener('DOMContentLoaded', function() {
-            console.log('DOM loaded, setting up Claude extension...');
+            // More robust regex to catch different table formats
+            const tableRegex = /\|\s*CATEGORY\s*\|\s*SCORE\s*\|([\s\S]*?)(?=<h2>|$)/i;
             
-            try {
-                loadPrompt();
-            } catch (error) {
-                console.error('Setup error:', error);
-                showError('Extension setup failed: ' + error.message);
-            }
-        });
+            return htmlSummary.replace(tableRegex, function(match) {
+                console.log('🔍 Converting table:', match.substring(0, 100));
+                
+                const lines = match.split(/<br>|\n/);
+                let tableHTML = '<table><thead><tr><th>CATEGORY</th><th>SCORE</th></tr></thead><tbody>';
+                
+                let foundRows = 0;
+                
+                lines.forEach(line => {
+                    // Skip header, separator, and empty lines
+                    if (!line.trim() || 
+                        line.includes('CATEGORY') || 
+                        line.includes('---') ||
+                        line.match(/^\|[\s-]+\|[\s-]+\|$/)) {
+                        return;
+                    }
+                    
+                    // Match any line with two pipe-separated values
+                    const pipeMatch = line.match(/\|\s*([^|]+)\|\s*([^|]+)\|/);
+                    if (pipeMatch) {
+                        let category = pipeMatch[1].trim();
+                        let scoreText = pipeMatch[2].trim();
+                        
+                        // Extract numeric value
+                        const scoreMatch = scoreText.match(/([\d.]+)/);
+                        if (scoreMatch) {
+                            const score = parseFloat(scoreMatch[1]).toFixed(1);
+                            
+                            // Check if this is the Total Score row
+                            if (category.toLowerCase().includes('total score')) {
+                                tableHTML += `<tr><td><strong>Total Score (Max 10)</strong></td><td><strong>${score}</strong></td></tr>`;
+                            } else {
+                                tableHTML += `<tr><td>${category}</td><td>${score}</td></tr>`;
+                            }
+                            foundRows++;
+                        }
+                    }
+                });
+                
+                tableHTML += '</tbody></table>';
+                
+                console.log(`✅ Converted table with ${foundRows} rows`);
+                
+                return tableHTML;
+            });
+        }
 
         function loadPrompt() {
             console.log('🔍 Loading Claude prompt via authenticated proxy...');
@@ -798,7 +799,9 @@
             
             htmlSummary = lines.join('<br>');
             
-            if (htmlSummary.includes('Category | Score')) {
+            // ✅ NEW: Check for table in multiple formats
+            if (htmlSummary.includes('CATEGORY') && htmlSummary.includes('SCORE') && htmlSummary.includes('|')) {
+                console.log('🔍 Table detected, converting...');
                 htmlSummary = convertMetricsTable(htmlSummary);
             }
             
