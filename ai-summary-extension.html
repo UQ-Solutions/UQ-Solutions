@@ -11,16 +11,15 @@
             padding: 0;
             background: white;
             min-height: 100vh;
+            overflow-y: auto;
         }
         
         .container {
             width: 100%;
             max-width: 1392px;
-            max-height: 1440px;
             margin: 0 auto;
             background: white;
             padding: 0;
-            overflow: hidden;
         }
         
         .header {
@@ -192,6 +191,10 @@
             border: 1px solid #ffcdd2;
             margin-top: 16px;
             font-family: 'Avenir Medium', 'Avenir', sans-serif;
+        }
+        .summary-container {
+        overflow-y: auto;
+        max-height: calc(100vh - 55px);
         }
     </style>
 </head>
