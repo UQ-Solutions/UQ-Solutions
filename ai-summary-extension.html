@@ -221,12 +221,12 @@
         
         // API Configuration
         const CLAUDE_API_URL = 'https://uq-solutions.vercel.app/api/claude';
-        const CLAUDE_PROMPT_URL = 'https://raw.githubusercontent.com/Lucas-Wisnieski/UQ-Solutions/main/prompts/ai-analysis-prompt.txt';
+        const CLAUDE_PROMPT_URL = 'https://raw.githubusercontent.com/UQ-Solutions/UQ-Solutions/main/prompts/ai-analysis-prompt.txt';
         
         // GitHub Pages URLs for Tableau API
         const GITHUB_API_URLS = [
-            'https://lucas-wisnieski.github.io/UQ-Solutions/js/tableau.extensions.1.latest.js',
-            'https://lucas-wisnieski.github.io/UQ-Solutions/js/tableau.extensions.1.latest.min.js'
+            'https://uq-solutions.github.io/UQ-Solutions/js/tableau.extensions.1.latest.js',
+            'https://uq-solutions.github.io/UQ-Solutions/js/tableau.extensions.1.latest.min.js'
         ];
 
         // Global state
@@ -457,8 +457,8 @@
             const baseProxyUrl = CLAUDE_API_URL.replace('/api/claude', '/api/github-proxy');
             
             const urls = [
-                `${baseProxyUrl}?url=${encodeURIComponent('https://lucas-wisnieski.github.io/UQ-Solutions/js/tableau.extensions.1.latest.js')}`,
-                `${baseProxyUrl}?url=${encodeURIComponent('https://lucas-wisnieski.github.io/UQ-Solutions/js/tableau.extensions.1.latest.min.js')}`,
+                `${baseProxyUrl}?url=${encodeURIComponent('https://uq-solutions.github.io/UQ-Solutions/js/tableau.extensions.1.latest.js')}`,
+                `${baseProxyUrl}?url=${encodeURIComponent('https://uq-solutions.github.io/UQ-Solutions/js/tableau.extensions.1.latest.min.js')}`,
                 'https://raw.githubusercontent.com/tableau/extensions-api/master/lib/tableau.extensions.1.latest.js'
             ];
         
