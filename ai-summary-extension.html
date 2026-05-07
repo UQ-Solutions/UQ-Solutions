@@ -452,13 +452,10 @@
                 initializeExtension();
                 return;
             }
-        
-            // Use authenticated proxy for GitHub-hosted Tableau APIs
-            const baseProxyUrl = CLAUDE_API_URL.replace('/api/claude', '/api/github-proxy');
             
             const urls = [
-                `${baseProxyUrl}?url=${encodeURIComponent('https://uq-solutions.github.io/UQ-Solutions/js/tableau.extensions.1.latest.js')}`,
-                `${baseProxyUrl}?url=${encodeURIComponent('https://uq-solutions.github.io/UQ-Solutions/js/tableau.extensions.1.latest.min.js')}`,
+                'https://uq-solutions.github.io/UQ-Solutions/js/tableau.extensions.1.latest.js',
+                'https://uq-solutions.github.io/UQ-Solutions/js/tableau.extensions.1.latest.min.js',
                 'https://raw.githubusercontent.com/tableau/extensions-api/master/lib/tableau.extensions.1.latest.js'
             ];
         
